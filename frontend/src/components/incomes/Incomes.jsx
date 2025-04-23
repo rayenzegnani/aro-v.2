@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { InnerLayout } from '../../styles/Layout.js';
 import { useGlobalContext } from '../../context/globalContext.jsx';
 import Form from '../Form/Form.jsx';

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { useGlobalContext } from '../../context/globalContext';
-import { InnerLayout } from '../../styles/Layout';
+import { InnerLayout } from '../../styles/Layout.js';
+import { useGlobalContext } from '../../context/globalContext.jsx';
 import ExpenseForm from './ExpenseForm.jsx';
-import IncomeItem from '../IncomeItem/IncomeItem';
+import IncomeItem from '../IncomeItem/IncomeItem.jsx';
 
 function Expenses() {
     const { addExpense, expenses, getExpenses, deleteExpense, totalExpenses } = useGlobalContext();
@@ -28,25 +27,25 @@ function Expenses() {
     const categories = [...new Set(expenses.map(expense => expense.category))];
 
     return (
-        <ExpenseStyled>
+        <div className="p-4 md:p-8 overflow-auto bg-white :bg-gray-800 min-h-screen">
             <InnerLayout>
-                <div className="header">
-                    <h1>Expenses</h1>
-                    <div className="filters">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                    <h1 className="text-2xl md:text-3xl font-bold text-white-7">Expense Management</h1>
+                    
+                    <div className="flex flex-wrap gap-2">
                         <select 
-                            className="filter-select"
+                            className="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-800"
                             value={activeFilter}
                             onChange={(e) => setActiveFilter(e.target.value)}
                         >
                             <option value="all">All Categories</option>
                             {categories.map(category => (
-                                <option key={category} value={category}>
-                                    {category}
-                                </option>
+                                <option key={category} value={category}>{category}</option>
                             ))}
                         </select>
+                        
                         <select 
-                            className="filter-select"
+                            className="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-800"
                             value={sortBy}
                             onChange={(e) => setSortBy(e.target.value)}
                         >
@@ -57,131 +56,126 @@ function Expenses() {
                         </select>
                     </div>
                 </div>
-                
-                <div className="total-expense">
-                    <h2>Total Expense: <span>DT{totalExpenses()}</span></h2>
+
+                <div className="bg-white rounded-xl shadow-md p-6 mb-6 border border-gray-200 flex justify-center items-center">
+                    <h2 className="text-xl md:text-2xl font-semibold text-gray-800">
+                        Total Expenses: 
+                        <span className="ml-3 text-2xl md:text-3xl font-bold text-red-800">
+                            DT {totalExpenses()}
+                        </span>
+                    </h2>
                 </div>
 
-                <div className="expense-content">
-                    <div className="form-container">
-                        <ExpenseForm />
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-1">
+                        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+                            <h3 className="text-xl font-semibold mb-4 text-gray-800">Add New Expense</h3>
+                            <ExpenseForm />
+                        </div>
+
+                        <div className="lg:hidden mt-6 bg-white rounded-xl shadow-md p-6 border border-gray-200">
+                            <h3 className="text-xl font-semibold mb-4 text-gray-800">Expense Summary</h3>
+                            <div className="space-y-3">
+                                <div className="flex justify-between text-gray-700">
+                                    <span>Transactions:</span>
+                                    <span className="font-medium">{expenses.length}</span>
+                                </div>
+                                <div className="flex justify-between text-gray-700">
+                                    <span>Avg. Expense:</span>
+                                    <span className="font-medium">DT {(totalExpenses() / (expenses.length || 1)).toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="expense-list">
-                        {filteredExpenses.map((expense) => {
-                            const {_id, title, amount, date, category, description, type} = expense;
-                            return (
-                                <IncomeItem
-                                    key={_id}
-                                    id={_id} 
-                                    title={title} 
-                                    description={description} 
-                                    amount={amount} 
-                                    date={date} 
-                                    type={type}
-                                    category={category} 
-                                    indicatorColor="#ff3030"  // Red indicator for expenses
-                                    deleteItem={deleteExpense}
-                                />
-                            )
-                        })}
+
+                    <div className="lg:col-span-2">
+                        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className="text-xl font-semibold text-gray-800">
+                                    Expense History ({filteredExpenses.length})
+                                </h3>
+                                <div className="text-sm text-gray-600">
+                                    Showing: {activeFilter === 'all' ? 'All' : activeFilter}
+                                </div>
+                            </div>
+
+                            {filteredExpenses.length === 0 ? (
+                                <div className="text-center py-8 text-gray-500">
+                                    No expense records found
+                                </div>
+                            ) : (
+                                <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+                                    {filteredExpenses.map((expense) => {
+                                        const { _id, title, amount, date, category, description, type } = expense;
+                                        return (
+                                            <div key={_id} className="bg-gray-50 p-4 rounded-lg flex justify-between items-center">
+                                                <div className="flex-1">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                                                        <div>
+                                                            <h4 className="font-medium text-gray-800">{title}</h4>
+                                                            <p className="text-sm text-gray-600">{category} • {new Date(date).toLocaleDateString()}</p>
+                                                        </div>
+                                                    </div>
+                                                    {description && <p className="mt-1 text-sm text-gray-600">{description}</p>}
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="font-semibold text-gray-800">DT {amount}</p>
+                                                    <button 
+                                                        onClick={() => deleteExpense(_id)}
+                                                        className="mt-1 text-red-600 hover:text-red-800 text-sm font-medium transition-colors"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="hidden lg:block lg:col-span-1">
+                        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200 sticky top-6">
+                            <h3 className="text-xl font-semibold mb-4 text-gray-800">Expense Summary</h3>
+                            <div className="space-y-4">
+                                <div className="flex justify-between text-gray-700">
+                                    <span>Total Transactions:</span>
+                                    <span className="font-medium">{expenses.length}</span>
+                                </div>
+                                <div className="flex justify-between text-gray-700">
+                                    <span>Average Expense:</span>
+                                    <span className="font-medium">DT {(totalExpenses() / (expenses.length || 1)).toFixed(2)}</span>
+                                </div>
+                                <div className="flex justify-between text-gray-700">
+                                    <span>Highest Expense:</span>
+                                    <span className="font-medium">DT {expenses.length > 0 ? Math.max(...expenses.map(i => i.amount)) : 0}</span>
+                                </div>
+                                <div className="pt-4 mt-4 border-t border-gray-200">
+                                    <div className="flex justify-between text-gray-700 mb-3">
+                                        <span>Categories:</span>
+                                        <span className="font-medium">{categories.length}</span>
+                                    </div>
+                                    <div className="space-y-2">
+                                        {categories.slice(0, 3).map(cat => (
+                                            <div key={cat} className="flex justify-between text-sm text-gray-600">
+                                                <span>{cat}</span>
+                                                <span>{expenses.filter(i => i.category === cat).length}</span>
+                                            </div>
+                                        ))}
+                                        {categories.length > 3 && (
+                                            <div className="text-sm text-blue-600">+{categories.length - 3} more</div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </InnerLayout>
-        </ExpenseStyled>
+        </div>
     )
 }
-
-const ExpenseStyled = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    background: #f8f9fa;
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-
-        h1 {
-            font-size: 2rem;
-            color: #2c3e50;
-        }
-
-        .filters {
-            display: flex;
-            gap: 1rem;
-
-            .filter-select {
-                background: white;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                padding: 0.5rem 1rem;
-                font-size: 0.9rem;
-                color: #333;
-                cursor: pointer;
-            }
-        }
-    }
-
-    .total-expense {
-        background: white;
-        border: 1px solid #eee;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        text-align: center;
-
-        h2 {
-            font-size: 1.5rem;
-            color: #2c3e50;
-            margin: 0;
-        }
-
-        span {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #ff3030;  // Red color for expense total
-        }
-    }
-
-    .expense-content {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-        gap: 2rem;
-
-        .form-container {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            height: fit-content;
-        }
-
-        .expense-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .expense-content {
-            grid-template-columns: 1fr;
-        }
-
-        .header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .filters {
-            width: 100%;
-            flex-direction: column;
-        }
-    }
-`;
 
 export default Expenses

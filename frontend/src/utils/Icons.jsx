@@ -30,3 +30,4 @@ export const circle = <i className="fa-solid fa-circle-dot"></i>
 export const cont = <i className="fa-solid fa-envelope"></i>
 export const chat = <i className="fa-brands fa-rocketchat"></i>
 export const parametre= <i className="fa-solid fa-gear"></i>
+export const modelAi=<i className="fa-solid fa-hexagon-nodes"></i>
