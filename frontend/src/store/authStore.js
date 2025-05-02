@@ -3,7 +3,6 @@ import axios from "axios";
 
 const API_URL = "http://localhost:5000/api/v1";
 
-// Configuration globale d'Axios
 axios.defaults.withCredentials = true;
 
 export const useAuthStore = create((set) => ({
