@@ -3,3 +3,11 @@ openai
 python-dotenv
 flask
 flask-cors
+<<<<<<< HEAD
+=======
+
+
+
+
+python main.py --api
+>>>>>>> 16365c64306b95b39b3f4f5efb5b8ec947ad564c
