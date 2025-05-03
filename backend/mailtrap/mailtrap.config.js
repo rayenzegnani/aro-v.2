@@ -36,8 +36,8 @@ const transport = nodemailer.createTransport({
 
 // Define sender details
 const sender = {
-  email: "your-email@example.com", // Replace with your sender email
-  name: "Your App Name", // Replace with your app or company name
+  email: "contact@fin_trackAI.com", // Replace with your sender email
+  name: "fin_track AI", // Replace with your app or company name
 };
 
 // Export the transport and sender

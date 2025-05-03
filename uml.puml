@@ -1,0 +1,23 @@
+@startuml Financial Chatbot Sequence Diagram
+
+actor User as "User"
+participant Frontend as "Frontend (UI)"
+participant Backend as "Backend (AIService)"
+participant OpenRouter as "OpenRouter AI"
+
+autonumber
+
+User -> Frontend: Asks question\n(e.g., "How to save for retirement?")
+Frontend -> Backend: POST /ask-ai\n{ query: user_question }
+
+activate Backend
+Backend -> OpenRouter: POST /chat/completions\n(API request with system/user prompts)
+activate OpenRouter
+OpenRouter --> Backend: AI response\n(financial advice)
+deactivate OpenRouter
+
+Backend --> Frontend: JSON response\n{ answer: "Start with a 401(k)..." }
+deactivate Backend
+Frontend --> User: Displays advice
+
+@enduml

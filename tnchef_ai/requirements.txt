@@ -1,0 +1,5 @@
+fastapi
+openai
+python-dotenv
+flask
+flask-cors

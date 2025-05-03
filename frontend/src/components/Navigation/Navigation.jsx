@@ -1,7 +1,7 @@
-import React from "react";
+
 import styled from "styled-components";
 import { menuItems } from "../../utils/menuItems.jsx";
-import { signout } from "../../utils/Icons.jsx";
+import {  signout } from "../../utils/Icons.jsx";
 import { useAuthStore } from "../../store/authStore.js";
 import { useNavigate } from "react-router-dom";
 import { parametre } from "../../utils/Icons.jsx";
@@ -58,15 +58,17 @@ function Navigation({ active, setActive }) {
             <span>{item.title}</span>
           </li>
         ))}
+      
         <li
           onClick={() => navigate("/account-settings")}
           className={active === "account-settings" ? "active" : ""}
           aria-label="Navigate to Account Settings"
         >
           <i className="icon-settings"></i>
-
-          <span> {parametre} Account Settings</span>
+          
+          <span>{parametre} Account Settings</span>
         </li>
+        
       </ul>
       <div className="bottom-nav">
         <li onClick={handleSignOut} aria-label="Sign Out">
@@ -84,47 +86,57 @@ const NavStyled = styled.nav`
   --secondary-color: rgba(34, 34, 96, 0.6);
   --active-indicator: #222260;
   --hover-transition: all 0.3s cubic-bezier(0.53, 0.21, 0, 1);
-  
-  padding: 2rem 1.5rem;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 32px;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+
+  padding: var(--spacing-lg);
   width: min(374px, 30%);
   min-width: 300px;
   height: 100%;
   background: var(--nav-bg);
   border: var(--nav-border);
   backdrop-filter: blur(4.5px);
-  border-radius: 32px;
+  border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 2rem;
+  gap: var(--spacing-lg);
   position: relative;
   z-index: 10;
+  box-shadow: var(--shadow-md);
+  transition: all 0.4s ease;
 
-  /* User container */
   .user-con {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: var(--spacing-md);
     text-align: center;
 
     .avatar-container {
       position: relative;
       width: clamp(80px, 10vw, 100px);
       height: clamp(80px, 10vw, 100px);
-      
+
       .avatar {
         width: 100%;
         height: 100%;
         border-radius: 50%;
         object-fit: cover;
         border: 2px solid #FFFFFF;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
+        box-shadow: var(--shadow-md);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        
+
         &:hover {
           transform: scale(1.05);
+          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
       }
 
@@ -139,6 +151,12 @@ const NavStyled = styled.nav`
         color: var(--secondary-color);
         font-size: 0.8rem;
         border: 2px dashed rgba(255, 255, 255, 0.6);
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: scale(1.05);
+          border-color: rgba(255, 255, 255, 0.9);
+        }
       }
     }
 
@@ -146,26 +164,26 @@ const NavStyled = styled.nav`
       font-size: clamp(1rem, 2vw, 1.2rem);
       color: var(--primary-color);
       font-weight: 600;
-      margin-top: 0.5rem;
+      margin-top: var(--spacing-sm);
       word-break: break-word;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
   }
 
-  /* Menu items */
   .menu-items {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 1rem 0;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) 0;
 
     li {
       display: grid;
       grid-template-columns: 30px auto;
       align-items: center;
-      gap: 1rem;
-      padding: 0.75rem 1rem;
-      border-radius: 12px;
+      gap: var(--spacing-md);
+      padding: 0.75rem var(--spacing-md);
+      border-radius: var(--radius-md);
       font-weight: 500;
       cursor: pointer;
       transition: var(--hover-transition);
@@ -177,6 +195,7 @@ const NavStyled = styled.nav`
       &:hover {
         color: var(--primary-color);
         background: rgba(255, 255, 255, 0.4);
+        transform: translateX(4px);
       }
 
       i, svg {
@@ -197,6 +216,7 @@ const NavStyled = styled.nav`
       color: var(--primary-color) !important;
       background: rgba(255, 255, 255, 0.6);
       font-weight: 600;
+      transform: translateX(0);
 
       &::before {
         content: "";
@@ -206,40 +226,47 @@ const NavStyled = styled.nav`
         width: 4px;
         height: 100%;
         background: var(--active-indicator);
-        border-radius: 0 10px 10px 0;
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        animation: slideIn 0.3s ease-out;
+      }
+
+      @keyframes slideIn {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
       }
     }
   }
 
-  /* Bottom navigation */
   .bottom-nav {
     li {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      padding: 0.75rem 1rem;
-      border-radius: 12px;
+      padding: 0.75rem var(--spacing-md);
+      border-radius: var(--radius-md);
       cursor: pointer;
       color: var(--secondary-color);
       font-weight: 500;
       transition: var(--hover-transition);
+      margin-buttom:30px;
+    height:10px;
 
       &:hover {
         color: var(--primary-color);
         background: rgba(255, 255, 255, 0.4);
+        transform: translateY(-2px);
       }
 
       i, svg {
         width: 20px;
         height: 20px;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover i, &:hover svg {
+        transform: rotate(-10deg);
       }
     }
-  }
-
-  /* Responsive design */
-  @media (max-width: 992px) {
-    width: 280px;
-    padding: 1.5rem 1rem;
   }
 
   @media (max-width: 768px) {
@@ -248,15 +275,16 @@ const NavStyled = styled.nav`
     border-radius: 0;
     border-left: none;
     border-right: none;
-    padding: 1rem;
+    padding: var(--spacing-md);
     flex-direction: row;
     align-items: center;
     height: auto;
-    gap: 1rem;
+    gap: var(--spacing-md);
+    backdrop-filter: blur(2.5px);
 
     .user-con {
       flex-direction: row;
-      gap: 0.75rem;
+      gap: var(--spacing-sm);
 
       .avatar-container {
         width: 50px;
@@ -273,13 +301,13 @@ const NavStyled = styled.nav`
       flex: 1;
       padding: 0;
       justify-content: center;
-      gap: 0.25rem;
+      gap: var(--spacing-sm);
 
       li {
         grid-template-columns: auto;
         justify-content: center;
-        padding: 0.5rem;
-        border-radius: 8px;
+        padding: var(--spacing-sm);
+        border-radius: var(--radius-sm);
 
         span {
           display: none;
@@ -299,7 +327,7 @@ const NavStyled = styled.nav`
       margin-left: auto;
 
       li {
-        padding: 0.5rem;
+        padding: var(--spacing-sm);
         span {
           display: none;
         }
@@ -307,9 +335,11 @@ const NavStyled = styled.nav`
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 576px) {
     .menu-items {
-      display: none;
+      display: flex; /* Change from 'none' to 'flex' */
+      flex-direction: row; /* Display icons in row */
+      gap: var(--spacing-sm); /* Add spacing between icons */
     }
 
     .bottom-nav li {
@@ -320,7 +350,10 @@ const NavStyled = styled.nav`
     }
   }
 
-  /* Dark mode support */
+  &:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+
   @media (prefers-color-scheme: dark) {
     --nav-bg: rgba(30, 30, 46, 0.78);
     --primary-color: rgba(222, 222, 255, 1);
@@ -355,7 +388,11 @@ const NavStyled = styled.nav`
       }
     }
   }
-`;
 
+  *:focus-visible {
+    outline: 2px solid var(--active-indicator);
+    outline-offset: 2px;
+  }
+`;
 
 export default Navigation;

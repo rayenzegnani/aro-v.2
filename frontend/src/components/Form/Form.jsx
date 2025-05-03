@@ -66,11 +66,11 @@ function Form() {
         <div className="submit-btn">
                 <Button 
                     name={'Add Income'}
-                    icon={plus}
-                    bPad={'.8rem 1.6rem'}
-                    bRad={'30px'}
-                    bg={'var(--color-green'}
-                    color={'#fff'}
+                           icon={plus}
+                           bPad={'.8rem 1.6rem'}
+                           bRad={'30px'}
+                           bg={'green'}
+                           color={'white'}
                 />
             </div>
 
